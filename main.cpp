@@ -15,7 +15,7 @@ class City;
 void ticker(int i, City c);
 void ps(string s, int x, int y);
 void CreateRoad();
-bool atend(Car c);
+bool atEnd(Car c);
 
 
 class Car{
@@ -61,8 +61,8 @@ public:
 };
 class City{
     vector<Car> carslist;
-    bool atend(Car c){
-        if (c.cx == 0 || c.cx==240){
+    bool atEnd(Car c){
+        if (c.cx == 0 || c.cx==250){
             return true;
         }
         return false;
@@ -71,7 +71,7 @@ public:
     void city(int tick){
         vector<Car> tmplist;
         for (int i=0; i<carslist.size(); i++){
-            if(atend(carslist.at(i))== false){
+            if(atEnd(carslist.at(i))== false){
                 tmplist.push_back(carslist.at(i));
             }else{
                 carslist.at(i).del();
@@ -82,6 +82,7 @@ public:
         for (int i=0; i<carslist.size(); i++){
             int maxs = carslist.at(i).maxS();
             int s = canGo(i,maxs);
+            // if the car has a speed of 4 it can update every tick, if the car has a speed of 2 it cna update on the 2 and 4 ticks
             if (s == 4 || ((tick==2 || tick==4)  && s == 2) || (tick==1 && s==1)){
                 carslist.at(i).car();
             }
@@ -117,7 +118,7 @@ public:
             return maxSpd;
         }
 
-        if (carslist.at(tc2).cx<tx && carslist.at(tc2).cy==ty){
+        if (carslist.at(tc2).cx<carslist.at(tc1).cx && carslist.at(tc2).cy==carslist.at(tc1).cy){
             int tempDist = ewDist(carslist.at(tc1),carslist.at(tc2))-1;
             if(tempDist>reqSpd){
                 return canGoR(i+1,reqSpd,curCar,maxSpd,tx,ty);
@@ -171,44 +172,37 @@ void hidecursor(){
 int main() {
     hidecursor();
     CreateRoad();
+    usleep(10000);
     City c;
+
+    c.newCar(2,230,4,-2,0);
+    c.newCar(4,240,4,-4,0);
     c.newCar(2,240,5,-2,0);
     c.newCar(4,230,5,-4,0);
-    c.newCar(4,240,4,-4,0);
-    c.newCar(2,230,4,-2,0);
     c.newCar(2,2,7,2,0);
     c.newCar(4,3,7,4,0);
     c.newCar(4,2,8,4,0);
     c.newCar(2,40,8,2,0);
     ticker(1,c);
-
-
-    /*
-    Car c1 = Car(4);
-    c1.cx = 240;
-    c1.cy = 3;
-    for (int i=240; i > 0; i--){
-        c1.left();
-        usleep(10000);
-    }
-    */
     system("pause");
 }
 
 
 
 void CreateRoad(){
-    for (int i=0; i<240; i++){
+    for (int i=0; i<255; i++){
         ps("_",i,2);
     }
-    for (int i=0; i<240; i++){
+    for (int i=0; i<255; i++){
         ps("=",i,6);
     }
-    for (int i=0; i<240; i++){
+    for (int i=0; i<255; i++){
         ps("_",i, 10);
     }
     ps("",1,20);
 }
+
+// ticker gives the ticks for the cars to run on.
 void ticker(int i, City c){
     i++;
     if(i>4){
