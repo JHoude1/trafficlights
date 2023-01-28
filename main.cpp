@@ -190,13 +190,13 @@ int main() {
 
 
 void CreateRoad(){
-    for (int i=0; i<255; i++){
+    for (int i=0; i<250; i++){
         ps("_",i,2);
     }
-    for (int i=0; i<255; i++){
+    for (int i=0; i<250; i++){
         ps("=",i,6);
     }
-    for (int i=0; i<255; i++){
+    for (int i=0; i<250; i++){
         ps("_",i, 10);
     }
     ps("",1,20);
