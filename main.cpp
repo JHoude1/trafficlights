@@ -7,23 +7,28 @@
 #include <vector>
 
 
+
+
 using namespace std;
 
 
 class Car;
 class City;
 class TrafficLight;
-void ticker(int i, City c);
+void ticker(int i, City c,int j);
 void ps(string s, int x, int y);
 void CreateRoad();
 bool atEndEW(Car c);
 bool atEndNS(Car c);
+bool canPlaceCar(int x, int y, vector<Car> cars);
 int srl;
 int srml;
 int srm;
 int srr;
 int srmr;
-int tlTick;
+int tlTick=0;
+int numOfCars=0;
+int maxNumOfCars= 200;
 vector<TrafficLight> trafficLightList;
 
 
@@ -79,6 +84,7 @@ public:
 
 class TrafficLight{
     bool isNS = false;
+    bool yellow = false;
     POINT startPos;
 
     void switchLights() {
@@ -93,11 +99,22 @@ public:
         int posY=startPos.y;
         int cx=tc.cx;
         int cy=tc.cy;
+
         if(!isNS){
-            if((tc.cx==startPos.x+1&&tc.cy==startPos.y)||(tc.cx==startPos.x+3&&tc.cy==startPos.y+7)){
+
+            if(((cx==posX+4&&cy==posY+1)||(cx==posX+4&&cy==posY+2)||(cx==posX+4&&cy==posY+3)||(cx==posX&&cy==posY+5)||(cx==posX&&cy==posY+6)||(cx==posX&&cy==posY+7))&&yellow){
                 return false;
             }
-        }else{
+
+            if((tc.cx==startPos.x+1&&tc.cy==startPos.y)||(tc.cx==startPos.x+3&&tc.cy==startPos.y+8)){
+                return false;
+            }
+        }else if(isNS){
+
+            if(((tc.cx==startPos.x+1&&tc.cy==startPos.y)||(tc.cx==startPos.x+3&&tc.cy==startPos.y+8))&&yellow){
+                return false;
+            }
+
             if((cx==posX+4&&cy==posY+1)||(cx==posX+4&&cy==posY+2)||(cx==posX+4&&cy==posY+3)||(cx==posX&&cy==posY+5)||(cx==posX&&cy==posY+6)||(cx==posX&&cy==posY+7)){
                 return false;
             }
@@ -107,10 +124,20 @@ public:
     void changeLight(){
         if (tlTick==300){
             switchLights();
-            tlTick=0;
-        }else{
+            yellow=true;
             tlTick++;
+
+        }else if(tlTick==330){
+            yellow=false;
+            tlTick=0;
         }
+        else{
+            tlTick++;
+            string s = to_string(tlTick);
+            ps(s,10,50);
+        }
+
+
     }
 
 };
@@ -135,12 +162,14 @@ class City{
 
 public:
     void city(int tick){
+
         vector<Car> tmplist;
         for (int i=0; i<carslist.size(); i++){
             if(atEndEW(carslist.at(i))== false && atEndNS(carslist.at(i))==false){
                 tmplist.push_back(carslist.at(i));
             }else{
                 carslist.at(i).del();
+                numOfCars--;
 
             }
 
@@ -165,6 +194,12 @@ public:
                 }
             }
         }
+        randplace();
+
+    }
+    void randplace(){
+        int i = 1+rand()%12;
+        newCar(i);
 
     }
     void newCar(int m,int x,int y,int vx,int vy){
@@ -172,6 +207,71 @@ public:
         c.cx=x;
         c.cy=y;
         carslist.push_back(c);
+    }
+    void newCar(int i){
+        if(numOfCars <= maxNumOfCars) {
+            if (i == 1) {
+                if (canPlaceCar(41, 1, carslist)) {
+                    newCar(1, 41, 1, 0, 1);
+                    numOfCars++;
+                }
+            } else if (i == 2) {
+                if (canPlaceCar(81, 1, carslist)) {
+                    newCar(1, 81, 1, 0, 1);
+                    numOfCars++;
+                }
+            } else if (i == 3) {
+                if (canPlaceCar(43, 1, carslist)) {
+                    newCar(1, 43, 14, 0, -1);
+                    numOfCars++;
+                }
+            } else if (i == 4) {
+                if (canPlaceCar(83, 1, carslist)) {
+                    newCar(1, 83, 14, 0, -1);
+                    numOfCars++;
+                }
+            } else if (i == 5) {
+                if (canPlaceCar(249, 3, carslist)) {
+                    newCar(1, 249, 3, -1, 0);
+                    numOfCars++;
+                }
+            } else if (i == 6) {
+                if (canPlaceCar(249, 4, carslist)) {
+                    newCar(2, 249, 4, -2, 0);
+                    numOfCars++;
+                }
+            } else if (i == 7) {
+                if (canPlaceCar(249, 5, carslist)) {
+                    newCar(4, 249, 5, -4, 0);
+                    numOfCars++;
+                }
+            } else if (i == 8) {
+                if (canPlaceCar(1, 7, carslist)) {
+                    newCar(4, 1, 7, 4, 0);
+                    numOfCars++;
+                }
+            } else if (i == 9) {
+                if (canPlaceCar(1, 8, carslist)) {
+                    newCar(2, 1, 8, 2, 0);
+                    numOfCars++;
+                }
+            } else if (i == 10) {
+                if (canPlaceCar(1, 9, carslist)) {
+                    newCar(1, 1, 9, 1, 0);
+                    numOfCars++;
+                }
+            }else if (i==11){
+                if (canPlaceCar(1, 9, carslist)) {
+                    newCar(1, 221, 1, 0, 1);
+                    numOfCars++;
+                }
+            }else if (i==12){
+                if (canPlaceCar(223, 14, carslist)) {
+                    newCar(1, 223, 14, 0, -1);
+                    numOfCars++;
+                }
+            }
+        }
     }
 
 
@@ -283,6 +383,7 @@ void ps(string s, int x, int y) {
     SetConsoleCursorPosition(h, c);
     cout << s;
 }
+
 void hidecursor(){
     static HANDLE h = NULL;
     h =  GetStdHandle(STD_OUTPUT_HANDLE);
@@ -295,29 +396,16 @@ void hidecursor(){
     return;
 }
 
-
-
 int main() {
     hidecursor();
     CreateRoad();
     usleep(10000);
     City c;
 
-    c.newCar(2,230,4,-2,0);
-    c.newCar(4,240,4,-4,0);
-    c.newCar(2,240,5,-2,0);
-    c.newCar(4,230,5,-4,0);
-    c.newCar(2,2,7,2,0);
-    c.newCar(4,3,7,4,0);
-    c.newCar(4,2,8,4,0);
-    c.newCar(2,40,8,2,0);
-    c.newCar(1,41,1,0,1);
-    ticker(1,c);
+
+    ticker(1,c,1);
     system("pause");
 }
-
-
-
 
 void createSideRoad(int startPos){
     POINT pos;
@@ -380,9 +468,6 @@ void createSideRoad(int startPos){
     ps("",1,20);
 }
 
-
-
-
 void CreateRoad(){
     for (int i=0; i<250; i++){
         ps("_",i,2);
@@ -398,14 +483,24 @@ void CreateRoad(){
     usleep(1000);
     createSideRoad(40);
     createSideRoad(80);
+    createSideRoad(220);
     ps("",1,20);
 
 }
 
+bool canPlaceCar(int x, int y, vector<Car> cars){
+    return true;
+    for (int i=0; i<cars.size(); i++){
+        if(x == cars.at(i).cx && y == cars.at(i).cy){
+            return false;
+        }
 
+    }
+    return true;
+}
 // ticker gives the ticks for the cars to run on.
-void ticker(int i, City c){
-    ps("AAAAA",i,50);
+void ticker(int i, City c,int j){
+
     i++;
     if(i>4){
         i=0;
@@ -414,8 +509,11 @@ void ticker(int i, City c){
     for(int i=0; i<trafficLightList.size();i++){
         trafficLightList.at(i).changeLight();
     }
+
+    j++;
     usleep(10000);
-    ticker(i,c);
+
+    ticker(i,c,j);
 }
 
 
