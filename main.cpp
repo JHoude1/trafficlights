@@ -29,6 +29,8 @@ int srmr;
 int tlTick=0;
 int numOfCars=0;
 int maxNumOfCars= 200;
+bool isNS = false;
+bool yellow = false;
 vector<TrafficLight> trafficLightList;
 
 
@@ -83,8 +85,7 @@ public:
 };
 
 class TrafficLight{
-    bool isNS = false;
-    bool yellow = false;
+
     POINT startPos;
 
     void switchLights() {
@@ -125,14 +126,15 @@ public:
         if (tlTick==300){
             switchLights();
             yellow=true;
-            tlTick++;
+
+
 
         }else if(tlTick==330){
             yellow=false;
             tlTick=0;
         }
         else{
-            tlTick++;
+
             string s = to_string(tlTick);
             ps(s,10,50);
         }
@@ -506,9 +508,13 @@ void ticker(int i, City c,int j){
         i=0;
     }
     c.city(i);
-    for(int i=0; i<trafficLightList.size();i++){
-        trafficLightList.at(i).changeLight();
+
+    for (int k = 0; k < trafficLightList.size(); k++) {
+        trafficLightList.at(k).changeLight();
     }
+    tlTick++;
+
+
 
     j++;
     usleep(10000);
