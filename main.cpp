@@ -5,6 +5,8 @@
 #include <conio.h>
 #include <windows.h>
 #include <vector>
+#include <fstream>
+
 
 
 
@@ -28,7 +30,7 @@ int srr;
 int srmr;
 int tlTick=0;
 int numOfCars=0;
-int maxNumOfCars= 200;
+int maxNumOfCars= 300;
 bool isNS = false;
 bool yellow = false;
 vector<TrafficLight> trafficLightList;
@@ -37,7 +39,8 @@ vector<TrafficLight> trafficLightList;
 
 
 class Car{
-
+    int dist=0;
+    int stop=0;
 public:
     int cx;
     int cy;
@@ -82,6 +85,18 @@ public:
     int maxS(){
         return max;
     }
+    void distance(){
+        dist++;
+    }
+    void stopped(){
+        stop++;
+    }
+    void recordData(){
+        ofstream data;
+        data.open("dataSheet.csv",data.app);
+        data<<dist<<","<<stop<<","<<dist+stop<<endl;
+        data.close();
+    };
 };
 
 class TrafficLight{
@@ -123,13 +138,20 @@ public:
         return true;
     }
     void changeLight(){
-        if (tlTick==300){
+        if (tlTick==300 && !isNS){
             switchLights();
             yellow=true;
 
 
 
-        }else if(tlTick==330){
+        }else if(tlTick==70 && isNS){
+            switchLights();
+            yellow=true;
+        }else if(tlTick==110 && yellow){
+            yellow=false;
+            tlTick=0;
+        }
+        else if(tlTick==330){
             yellow=false;
             tlTick=0;
         }
@@ -141,7 +163,6 @@ public:
 
 
     }
-
 };
 
 
@@ -165,11 +186,13 @@ class City{
 public:
     void city(int tick){
 
+        ps(to_string(numOfCars),10,90);
         vector<Car> tmplist;
         for (int i=0; i<carslist.size(); i++){
             if(atEndEW(carslist.at(i))== false && atEndNS(carslist.at(i))==false){
                 tmplist.push_back(carslist.at(i));
             }else{
+                carslist.at(i).recordData();
                 carslist.at(i).del();
                 numOfCars--;
 
@@ -186,6 +209,9 @@ public:
                 // if the car has a speed of 4 it can update every tick, if the car has a speed of 2 it cna update on the 2 and 4 ticks
                 if ((s1 == 4 || ((tick==2 || tick==4)  && s1 == 2) || (tick==1 && s1==1))){
                     carslist.at(i).car();
+                    carslist.at(i).distance();
+                }else if(isNS){
+                    carslist.at(i).stopped();
                 }
             }else{                                  // up & down
                 int maxsNS= carslist.at(i).maxS();
@@ -193,6 +219,9 @@ public:
                 // if the car has a speed of 4 it can update every tick, if the car has a speed of 2 it cna update on the 2 and 4 ticks
                 if ((s2 == 4 || ((tick==2 || tick==4)  && s2 == 2) || (tick==1 && s2==1))){
                     carslist.at(i).car();
+                    carslist.at(i).distance();
+                }else if(!isNS){
+                    carslist.at(i).stopped();
                 }
             }
         }
@@ -223,12 +252,12 @@ public:
                     numOfCars++;
                 }
             } else if (i == 3) {
-                if (canPlaceCar(43, 1, carslist)) {
+                if (canPlaceCar(43, 14, carslist)) {
                     newCar(1, 43, 14, 0, -1);
                     numOfCars++;
                 }
             } else if (i == 4) {
-                if (canPlaceCar(83, 1, carslist)) {
+                if (canPlaceCar(83, 14, carslist)) {
                     newCar(1, 83, 14, 0, -1);
                     numOfCars++;
                 }
@@ -263,7 +292,7 @@ public:
                     numOfCars++;
                 }
             }else if (i==11){
-                if (canPlaceCar(1, 9, carslist)) {
+                if (canPlaceCar(221, 1, carslist)) {
                     newCar(1, 221, 1, 0, 1);
                     numOfCars++;
                 }
@@ -491,9 +520,9 @@ void CreateRoad(){
 }
 
 bool canPlaceCar(int x, int y, vector<Car> cars){
-    return true;
+
     for (int i=0; i<cars.size(); i++){
-        if(x == cars.at(i).cx && y == cars.at(i).cy){
+        if(abs(x - cars.at(i).cx)<=0  && abs(y - cars.at(i).cy)<=0){
             return false;
         }
 
