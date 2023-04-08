@@ -31,6 +31,7 @@ int srmr;
 int tlTick=0;
 int numOfCars=0;
 int maxNumOfCars= 300;
+int totalTime=0;
 bool isNS = false;
 
 vector<TrafficLight> trafficLightList;
@@ -96,8 +97,9 @@ public:
     void recordData(){
         ofstream data;
         data.open("dataSheet.csv",data.app);
-        data<<dist<<","<<stop<<","<<dist+stop<<endl;
+        data<<dist<<","<<stop<<","<<dist+stop<<","<<numOfCars<<","<<totalTime<<endl;
         data.close();
+
     };
 };
 
@@ -556,7 +558,7 @@ void ticker(int i, City c,int j){
 
     j++;
     usleep(10000);
-
+    totalTime++;
     ticker(i,c,j);
 }
 
