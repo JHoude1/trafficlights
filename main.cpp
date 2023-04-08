@@ -32,9 +32,9 @@ int tlTick=0;
 int numOfCars=0;
 int maxNumOfCars= 300;
 bool isNS = false;
-bool yellow = false;
-vector<TrafficLight> trafficLightList;
 
+vector<TrafficLight> trafficLightList;
+vector<Car> checklist;
 
 
 
@@ -100,11 +100,15 @@ public:
 };
 
 class TrafficLight{
-
+    int carCount;
+    int tickL = 0;
     POINT startPos;
-
+    bool NSL = false;
+    bool yellow = false;
+    bool tooSoon = false;
     void switchLights() {
         isNS = !isNS;
+        NSL =!NSL;
     }
 public:
     TrafficLight(POINT setPos){
@@ -116,7 +120,7 @@ public:
         int cx=tc.cx;
         int cy=tc.cy;
 
-        if(!isNS){
+        if(!NSL){
 
             if(((cx==posX+4&&cy==posY+1)||(cx==posX+4&&cy==posY+2)||(cx==posX+4&&cy==posY+3)||(cx==posX&&cy==posY+5)||(cx==posX&&cy==posY+6)||(cx==posX&&cy==posY+7))&&yellow){
                 return false;
@@ -125,7 +129,7 @@ public:
             if((tc.cx==startPos.x+1&&tc.cy==startPos.y)||(tc.cx==startPos.x+3&&tc.cy==startPos.y+8)){
                 return false;
             }
-        }else if(isNS){
+        }else if(NSL){
 
             if(((tc.cx==startPos.x+1&&tc.cy==startPos.y)||(tc.cx==startPos.x+3&&tc.cy==startPos.y+8))&&yellow){
                 return false;
@@ -138,30 +142,32 @@ public:
         return true;
     }
     void changeLight(){
-        if (tlTick==300 && !isNS){
+
+        for(int i=0;i<checklist.size();i++){
+            if ((checklist.at(i).cx >= startPos.x+4 && checklist.at(i).cx <= startPos.x+20 && checklist.at(i).cy <4)||(checklist.at(i).cx >= startPos.x-20 && checklist.at(i).cx <= startPos.x&& checklist.at(i).cy >4)){
+                carCount++;
+            }
+        }
+        if (carCount*2 < tickL && !tooSoon){
+            ps(to_string(carCount),50,55);
+            ps(to_string(tickL),50,58);
+            tooSoon=true;
+            yellow = true;
+            tickL = -70;
+        }else if (tickL==-40){
+            switchLights();
+            yellow = false;
+        }else if(tickL==-30){
             switchLights();
             yellow=true;
-
-
-
-        }else if(tlTick==70 && isNS){
-            switchLights();
-            yellow=true;
-        }else if(tlTick==110 && yellow){
+        }else if(tickL==-1){
             yellow=false;
-            tlTick=0;
-        }
-        else if(tlTick==330){
-            yellow=false;
-            tlTick=0;
-        }
-        else{
-
-            string s = to_string(tlTick);
-            ps(s,10,50);
+            tooSoon=false;
         }
 
+        tickL++;
 
+        carCount=0;
     }
 };
 
@@ -186,7 +192,7 @@ class City{
 public:
     void city(int tick){
 
-        ps(to_string(numOfCars),10,90);
+        //ps(to_string(numOfCars),10,90);
         vector<Car> tmplist;
         for (int i=0; i<carslist.size(); i++){
             if(atEndEW(carslist.at(i))== false && atEndNS(carslist.at(i))==false){
@@ -226,6 +232,7 @@ public:
             }
         }
         randplace();
+        checklist = carslist;
 
     }
     void randplace(){
