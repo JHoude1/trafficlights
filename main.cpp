@@ -48,12 +48,14 @@ public:
     int nsDirection;
     int max;
     int speed;
+    bool stoppedByLight;
     Car(int m,int ewd,int nsd){
         max = m;
         ewDirection=ewd;
         nsDirection=nsd;
     }
     void car(){
+        stoppedByLight=false;
         if (ewDirection>0){right();}
         if (ewDirection<0){left();}
         if (nsDirection>0){down();}
@@ -154,7 +156,7 @@ public:
             tooSoon=true;
             yellow = true;
             tickL = -70;
-        }else if (tickL==-40){
+        }else if (tickL==-45){
             switchLights();
             yellow = false;
         }else if(tickL==-30){
@@ -216,7 +218,7 @@ public:
                 if ((s1 == 4 || ((tick==2 || tick==4)  && s1 == 2) || (tick==1 && s1==1))){
                     carslist.at(i).car();
                     carslist.at(i).distance();
-                }else if(isNS){
+                }else if(carslist.at(i).max == 4 || ((tick==2 || tick==4)  && (carslist.at(i).max == 2) || (tick==1 && (carslist.at(i).max ==1)))){
                     carslist.at(i).stopped();
                 }
             }else{                                  // up & down
@@ -226,7 +228,7 @@ public:
                 if ((s2 == 4 || ((tick==2 || tick==4)  && s2 == 2) || (tick==1 && s2==1))){
                     carslist.at(i).car();
                     carslist.at(i).distance();
-                }else if(!isNS){
+                }else if(carslist.at(i).max == 4 || ((tick==2 || tick==4)  && (carslist.at(i).max == 2) || (tick==1 && (carslist.at(i).max ==1)))){
                     carslist.at(i).stopped();
                 }
             }
