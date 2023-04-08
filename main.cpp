@@ -23,6 +23,7 @@ void CreateRoad();
 bool atEndEW(Car c);
 bool atEndNS(Car c);
 bool canPlaceCar(int x, int y, vector<Car> cars);
+int totalTime=0;
 int srl;
 int srml;
 int srm;
@@ -94,7 +95,7 @@ public:
     void recordData(){
         ofstream data;
         data.open("dataSheet.csv",data.app);
-        data<<dist<<","<<stop<<","<<dist+stop<<endl;
+        data<<dist<<","<<stop<<","<<dist+stop<<","<<numOfCars<<","<<totalTime<<endl;
         data.close();
     };
 };
@@ -547,6 +548,7 @@ void ticker(int i, City c,int j){
 
     j++;
     usleep(10000);
+    totalTime++;
 
     ticker(i,c,j);
 }
