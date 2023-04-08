@@ -145,7 +145,7 @@ public:
 
 
 
-        }else if(tlTick==70 && isNS){
+        }else if(tlTick==30 && isNS){
             switchLights();
             yellow=true;
         }else if(tlTick==110 && yellow){
@@ -211,7 +211,7 @@ public:
                 if ((s1 == 4 || ((tick==2 || tick==4)  && s1 == 2) || (tick==1 && s1==1))){
                     carslist.at(i).car();
                     carslist.at(i).distance();
-                }else if(isNS){
+                }else if((carslist.at(i).max == 4 || ((tick==2 || tick==4)  && (carslist.at(i).max == 2) || (tick==1 && (carslist.at(i).max ==1))))){
                     carslist.at(i).stopped();
                 }
             }else{                                  // up & down
@@ -221,7 +221,7 @@ public:
                 if ((s2 == 4 || ((tick==2 || tick==4)  && s2 == 2) || (tick==1 && s2==1))){
                     carslist.at(i).car();
                     carslist.at(i).distance();
-                }else if(!isNS){
+                }else if((carslist.at(i).max == 4 || ((tick==2 || tick==4)  && (carslist.at(i).max == 2) || (tick==1 && (carslist.at(i).max ==1))))){
                     carslist.at(i).stopped();
                 }
             }
