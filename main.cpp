@@ -452,15 +452,21 @@ void createSideRoad(int startPos){
     srr=startPos+4;
 
     for (int i=0;i<3;i++){
+        cout << "\033[47m";
         ps("|",srl,i);
+        cout << "\033[0m";
     }
     usleep(2000);
     for (int i=0;i<3;i++){
+        cout << "\033[33m";
         ps("\"",srm,i);
+        cout << "\033[0m";
     }
     usleep(2000);
     for (int i=0;i<3;i++){
+        cout << "\033[47m";
         ps("|",srr,i);
+        cout << "\033[0m";
     }
     usleep(2000);
     for (int i=0;i<3;i++){
@@ -473,15 +479,21 @@ void createSideRoad(int startPos){
     usleep(2000);
 
     for (int i=10;i<14;i++){
+        cout << "\033[47m";
         ps("|",srl,i);
+        cout << "\033[0m";
     }
     usleep(2000);
     for (int i=10;i<14;i++){
+        cout << "\033[33m";
         ps("\"",srm,i);
+        cout << "\033[0m";
     }
     usleep(2000);
     for (int i=10;i<14;i++){
+        cout << "\033[47m";
         ps("|",srr,i);
+        cout << "\033[0m";
     }
     usleep(2000);
     for (int i=10;i<14;i++){
@@ -493,25 +505,31 @@ void createSideRoad(int startPos){
     }
     usleep(2000);
     for (int i=startPos;i<startPos+5;i++){
-        ps(" ",i,10);
+        // ps(" ",i,10);
         ps(" ",i,6);
     }
     usleep(2000);
     ps("",1,20);
 }
 
-void CreateRoad(){
-    for (int i=0; i<250; i++){
-        ps("_",i,2);
+void CreateRoad() {
+    cout << "\033[47m";
+    for (int i = 0; i < 250; i++) {
+        ps("_", i, 2);
     }
+    cout << "\033[0m";
     usleep(1000);
-    for (int i=0; i<250; i++){
-        ps("=",i,6);
+    cout << "\033[33m";
+    for (int i=0; i<250; i++) {
+        ps("=", i, 6);
     }
+    cout << "\033[0m";
     usleep(1000);
-    for (int i=0; i<250; i++){
-        ps("_",i, 10);
+    cout << "\033[47m";
+    for (int i=0; i<250; i++) {
+        ps("_", i, 10);
     }
+    cout << "\033[0m";
     usleep(1000);
     createSideRoad(40);
     createSideRoad(80);
