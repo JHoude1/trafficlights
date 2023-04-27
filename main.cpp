@@ -110,6 +110,7 @@ class TrafficLight{
     bool NSL = false;
     bool yellow = false;
     bool tooSoon = false;
+    bool DoNotChange = true;
     void switchLights() {
         isNS = !isNS;
         NSL =!NSL;
@@ -146,27 +147,31 @@ public:
         return true;
     }
     void changeLight(){
-
         for(int i=0;i<checklist.size();i++){
             if ((checklist.at(i).cx >= startPos.x+4 && checklist.at(i).cx <= startPos.x+20 && checklist.at(i).cy <4)||(checklist.at(i).cx >= startPos.x-20 && checklist.at(i).cx <= startPos.x&& checklist.at(i).cy >4)){
                 carCount++;
             }
+            if(((checklist.at(i).cx == startPos.x+1 && checklist.at(i).cy == startPos.y )||(checklist.at(i).cx == startPos.x+3 && checklist.at(i).cy == startPos.y+8 ))&&DoNotChange){
+                DoNotChange= false;
+                tickL=0;
+            }
         }
-        if (carCount*2 < tickL && !tooSoon){
-            ps(to_string(carCount),50,55);
+        if (carCount*6 < tickL && !tooSoon && !DoNotChange){
+            ps(to_string(carCount*6),50,55);
             ps(to_string(tickL),50,58);
             tooSoon=true;
             yellow = true;
             tickL = -70;
-        }else if (tickL==-45){
+        }else if (tickL==-45 && !DoNotChange){
             switchLights();
             yellow = false;
-        }else if(tickL==-30){
+        }else if(tickL==-30 && !DoNotChange){
             switchLights();
             yellow=true;
-        }else if(tickL==-1){
+        }else if(tickL==-1 && !DoNotChange){
             yellow=false;
             tooSoon=false;
+            DoNotChange=!DoNotChange;
         }
 
         tickL++;
@@ -240,7 +245,7 @@ public:
 
     }
     void randplace(){
-        int i = 1+rand()%12;
+        int i = 1+rand()%25;
         newCar(i);
 
     }
@@ -272,32 +277,32 @@ public:
                     newCar(1, 83, 14, 0, -1);
                     numOfCars++;
                 }
-            } else if (i == 5) {
+            } else if (i == 5 || i == 13 || i == 25) {
                 if (canPlaceCar(249, 3, carslist)) {
                     newCar(1, 249, 3, -1, 0);
                     numOfCars++;
                 }
-            } else if (i == 6) {
+            } else if (i == 6 || i == 14 || i == 24) {
                 if (canPlaceCar(249, 4, carslist)) {
                     newCar(2, 249, 4, -2, 0);
                     numOfCars++;
                 }
-            } else if (i == 7) {
+            } else if (i == 7 || i == 15 || i == 23) {
                 if (canPlaceCar(249, 5, carslist)) {
                     newCar(4, 249, 5, -4, 0);
                     numOfCars++;
                 }
-            } else if (i == 8) {
+            } else if (i == 8 || i == 17 || i == 22) {
                 if (canPlaceCar(1, 7, carslist)) {
                     newCar(4, 1, 7, 4, 0);
                     numOfCars++;
                 }
-            } else if (i == 9) {
+            } else if (i == 9 || i == 18 || i == 21) {
                 if (canPlaceCar(1, 8, carslist)) {
                     newCar(2, 1, 8, 2, 0);
                     numOfCars++;
                 }
-            } else if (i == 10) {
+            } else if (i == 10 || i == 19 || i == 20) {
                 if (canPlaceCar(1, 9, carslist)) {
                     newCar(1, 1, 9, 1, 0);
                     numOfCars++;
@@ -461,64 +466,75 @@ void createSideRoad(int startPos){
     srmr=startPos+3;
     srr=startPos+4;
 
+    cout << "\033[47m";
     for (int i=0;i<3;i++){
-        cout << "\033[47m";
+        usleep(1000);
         ps("|",srl,i);
-        cout << "\033[0m";
     }
-    usleep(2000);
+    cout << "\033[0m";
+    usleep(8000);
+    cout << "\033[33m";
     for (int i=0;i<3;i++){
-        cout << "\033[33m";
+        usleep(1000);
         ps("\"",srm,i);
-        cout << "\033[0m";
     }
-    usleep(2000);
+    cout << "\033[0m";
+    usleep(8000);
+    cout << "\033[47m";
     for (int i=0;i<3;i++){
-        cout << "\033[47m";
+        usleep(1000);
         ps("|",srr,i);
-        cout << "\033[0m";
     }
-    usleep(2000);
+    cout << "\033[0m";
+    usleep(8000);
     for (int i=0;i<3;i++){
+        usleep(1000);
         ps(" ",srml,i);
     }
-    usleep(2000);
+    usleep(8000);
     for (int i=0;i<3;i++){
+        usleep(1000);
         ps(" ",srmr,i);
     }
-    usleep(2000);
+    usleep(8000);
 
+    cout << "\033[47m";
     for (int i=10;i<14;i++){
-        cout << "\033[47m";
+        usleep(1000);
         ps("|",srl,i);
-        cout << "\033[0m";
     }
-    usleep(2000);
+    cout << "\033[0m";
+    usleep(8000);
+    cout << "\033[33m";
     for (int i=10;i<14;i++){
-        cout << "\033[33m";
+        usleep(1000);
         ps("\"",srm,i);
-        cout << "\033[0m";
     }
-    usleep(2000);
+    cout << "\033[0m";
+    usleep(8000);
+    cout << "\033[47m";
     for (int i=10;i<14;i++){
-        cout << "\033[47m";
+        usleep(1000);
         ps("|",srr,i);
-        cout << "\033[0m";
     }
-    usleep(2000);
+    cout << "\033[0m";
+    usleep(8000);
     for (int i=10;i<14;i++){
+        usleep(1000);
         ps(" ",srml,i);
     }
-    usleep(2000);
+    usleep(8000);
     for (int i=10;i<14;i++){
+        usleep(1000);
         ps(" ",srmr,i);
     }
-    usleep(2000);
+    usleep(8000);
     for (int i=startPos;i<startPos+5;i++){
+        usleep(1000);
        // ps(" ",i,10);
         ps(" ",i,6);
     }
-    usleep(2000);
+    usleep(8000);
     ps("",1,20);
 }
 
