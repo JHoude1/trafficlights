@@ -230,7 +230,7 @@ public:
 
     }
     void randplace(){
-        int i = 1+rand()%12;
+        int i = 1+rand()%25;
         newCar(i);
 
     }
@@ -262,32 +262,32 @@ public:
                     newCar(1, 83, 14, 0, -1);
                     numOfCars++;
                 }
-            } else if (i == 5) {
+            } else if (i == 5 || i == 13 || i == 25) {
                 if (canPlaceCar(249, 3, carslist)) {
                     newCar(1, 249, 3, -1, 0);
                     numOfCars++;
                 }
-            } else if (i == 6) {
+            } else if (i == 6 || i == 14 || i == 24) {
                 if (canPlaceCar(249, 4, carslist)) {
                     newCar(2, 249, 4, -2, 0);
                     numOfCars++;
                 }
-            } else if (i == 7) {
+            } else if (i == 7 || i == 15 || i == 23) {
                 if (canPlaceCar(249, 5, carslist)) {
                     newCar(4, 249, 5, -4, 0);
                     numOfCars++;
                 }
-            } else if (i == 8) {
+            } else if (i == 8 || i == 17 || i == 22) {
                 if (canPlaceCar(1, 7, carslist)) {
                     newCar(4, 1, 7, 4, 0);
                     numOfCars++;
                 }
-            } else if (i == 9) {
+            } else if (i == 9 || i == 18 || i == 21) {
                 if (canPlaceCar(1, 8, carslist)) {
                     newCar(2, 1, 8, 2, 0);
                     numOfCars++;
                 }
-            } else if (i == 10) {
+            } else if (i == 10 || i == 19 || i == 20) {
                 if (canPlaceCar(1, 9, carslist)) {
                     newCar(1, 1, 9, 1, 0);
                     numOfCars++;
@@ -455,26 +455,31 @@ void createSideRoad(int startPos){
         cout << "\033[47m";
         ps("|",srl,i);
         cout << "\033[0m";
+        usleep(1000);
     }
     usleep(2000);
     for (int i=0;i<3;i++){
         cout << "\033[33m";
         ps("\"",srm,i);
         cout << "\033[0m";
+        usleep(1000);
     }
     usleep(2000);
     for (int i=0;i<3;i++){
         cout << "\033[47m";
         ps("|",srr,i);
         cout << "\033[0m";
+        usleep(1000);
     }
     usleep(2000);
     for (int i=0;i<3;i++){
         ps(" ",srml,i);
+        usleep(1000);
     }
     usleep(2000);
     for (int i=0;i<3;i++){
         ps(" ",srmr,i);
+        usleep(1000);
     }
     usleep(2000);
 
@@ -482,31 +487,37 @@ void createSideRoad(int startPos){
         cout << "\033[47m";
         ps("|",srl,i);
         cout << "\033[0m";
+        usleep(1000);
     }
     usleep(2000);
     for (int i=10;i<14;i++){
         cout << "\033[33m";
         ps("\"",srm,i);
         cout << "\033[0m";
+        usleep(1000);
     }
     usleep(2000);
     for (int i=10;i<14;i++){
         cout << "\033[47m";
         ps("|",srr,i);
         cout << "\033[0m";
+        usleep(1000);
     }
     usleep(2000);
     for (int i=10;i<14;i++){
         ps(" ",srml,i);
+        usleep(1000);
     }
     usleep(2000);
     for (int i=10;i<14;i++){
         ps(" ",srmr,i);
+        usleep(1000);
     }
     usleep(2000);
     for (int i=startPos;i<startPos+5;i++){
         // ps(" ",i,10);
         ps(" ",i,6);
+        usleep(1000);
     }
     usleep(2000);
     ps("",1,20);
